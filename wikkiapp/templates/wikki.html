@@ -1,0 +1,54 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wikki Article</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <body>
+ <form action='/download/' method='GET'>
+  <div class="ui-widget">
+    <label for="res">Wikki: </label>
+    <input id="res" name='res'>
+  
+    <button type="submit" >Download</button>
+  </div>
+  
+ </form>
+ 
+</body>
+  
+</head>
+<script>
+
+  
+    $(document).ready(function(){
+
+      $("#res").on("keyup", function() {
+          var options = [];
+          var value = $(this).val().toLowerCase();
+         $.ajax({
+
+            url: "https://en.wikipedia.org/w/api.php?action=opensearch&format=json&formatversion=2&search="+value+"&namespace=0&limit=10&suggest=true",
+            type: 'GET',
+            crossDomain: true,
+            dataType: 'jsonp',
+            success: function(data) { 
+                $.each(data[1], function(key,value) {
+                  console.log(value);
+                  options.push(value);
+                   $( "#res" ).autocomplete({
+                      source: options
+                    });
+                });
+            },
+            error: function() { alert('Failed!'); },
+        });
+
+      });
+        
+    });
+  </script>
+</html>
